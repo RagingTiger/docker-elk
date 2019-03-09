@@ -1,0 +1,3 @@
+http.host: 0.0.0.0
+node.name: gn-01
+xpack.monitoring.elasticsearch.url: http://elasticsearch:9200

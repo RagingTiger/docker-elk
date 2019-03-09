@@ -1,0 +1,56 @@
+version: '2'
+
+services:
+
+  elasticsearch:
+    image: elasticsearch:6.5.4
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - ./elasticsearch/data:/usr/share/elasticsearch/data
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - discovery.type=single-node
+      - cluster.name=elk-stack
+      - node.name=elk01
+    networks:
+      - elk
+
+  kibana:
+    image: kibana:6.5.4
+    ports:
+      - "5601:5601"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+
+  logstash:
+    image: logstash:6.5.4
+    hostname: "elk01"
+    user: "33"
+    ports:
+      - "5044:5044"
+      - "9600:9600"
+    volumes:
+      - /var/log/nginx:/var/log/nginx
+      - ./logstash/misc:/var/log/misc/
+      - ./logstash/pipeline:/usr/share/logstash/pipeline
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./logstash/data:/usr/share/logstash/data/
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+      - kibana
+
+networks:
+
+  elk:
+    driver: bridge
