@@ -9,17 +9,14 @@ Dockerized ELK stack
 ├── elasticsearch
 │   ├── config
 │   │   └── elasticsearch.yml
-│   ├── data
-│   └── logs
+│   └── data
 ├── kibana
-│   ├── config
-│   │   └── kibana.yml
-│   └── logs
+│   └── config
+│       └── kibana.yml
 └── logstash
     ├── config
     │   └── logstash.yml
     ├── data
-    ├── logs
     ├── misc
     └── pipeline
         └── logstash.conf
